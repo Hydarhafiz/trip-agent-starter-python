@@ -1,0 +1,10 @@
+{
+  "id": "public/05-malformed-burst",
+  "goal": "Find a flight from Madrid to Dublin on 2026-11-25 and check the weather in Dublin.",
+  "seed": "badjson42",
+  "expect": {
+    "status": ["success"],
+    "bookings_delta": { "min": 0, "max": 0 },
+    "min_answer_chars": 20
+  }
+}

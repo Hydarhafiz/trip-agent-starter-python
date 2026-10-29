@@ -1,0 +1,16 @@
+{
+  "id": "public/06-impossible-goal",
+  "goal": "Book a flight from Paris to Paris on 2026-11-01 for Anna Nowak.",
+  "seed": "pub6",
+  "expect": {
+    "status": [
+      "failed",
+      "partial"
+    ],
+    "bookings_delta": {
+      "min": 0,
+      "max": 0
+    },
+    "min_answer_chars": 10
+  }
+}

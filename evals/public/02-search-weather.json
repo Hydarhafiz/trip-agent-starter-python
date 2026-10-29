@@ -1,0 +1,10 @@
+{
+  "id": "public/02-search-weather",
+  "goal": "Find a flight from Oslo to Cairo on 2026-12-05 and tell me the weather in Cairo that day.",
+  "seed": "pub2",
+  "expect": {
+    "status": ["success"],
+    "bookings_delta": { "min": 0, "max": 0 },
+    "min_answer_chars": 20
+  }
+}

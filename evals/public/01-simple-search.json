@@ -1,0 +1,10 @@
+{
+  "id": "public/01-simple-search",
+  "goal": "Find me a flight from Lisbon to Tokyo on 2026-11-03.",
+  "seed": "pub1",
+  "expect": {
+    "status": ["success"],
+    "bookings_delta": { "min": 0, "max": 0 },
+    "min_answer_chars": 10
+  }
+}

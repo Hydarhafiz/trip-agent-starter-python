@@ -1,0 +1,18 @@
+{
+  "id": "public/03-booking-happy-path",
+  "goal": "Book the cheapest nonstop flight from Porto to Oslo on 2026-11-18 for Maria Silva.",
+  "seed": "pub3",
+  "expect": {
+    "status": [
+      "success"
+    ],
+    "bookings_delta": {
+      "min": 1,
+      "max": 1
+    },
+    "min_answer_chars": 10,
+    "forbidden_flights": [
+      "XX999"
+    ]
+  }
+}
