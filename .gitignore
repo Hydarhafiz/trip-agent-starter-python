@@ -1,1 +1,5 @@
 .env
+.sdd/
+__pycache__/
+.pytest_cache/
+out/
