@@ -1,8 +1,10 @@
 # Assessment roadmap
 
-One milestone: improve the existing travel CLI's reliability, safety and evidence
-within the assessment's four-hour cap. Preserve the CLI, HTTP endpoints, public
-scenarios and two-module architecture. No frameworks or new dependencies.
+The single Jubilabs reliability milestone is complete: slices A–E preserve the
+starter architecture and CLI while correcting retries, booking safety, validation,
+completion, weather, caching, execution bounds and observability. Final evidence
+is 155 passing offline cases and the developer's 6/6 hosted public run.
 
-The approved milestone is in [milestone.md](milestone.md). Batch 1 covers A–C;
-Batch 2 (D–E) and hosted evaluations require a separate user checkpoint.
+The completed milestone is in [milestone.md](milestone.md), with design and tradeoffs
+in the root DESIGN.md. No additional implementation is planned. Remaining manual
+steps are portal submission and the unassisted technical walkthrough.

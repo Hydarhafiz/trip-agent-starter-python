@@ -1,17 +1,12 @@
-# trip-agent — take-home assessment starter (Python)
+# trip-agent — reliable travel-agent CLI (Python)
 
-**Read this first: this is not an empty repo.** A previous contractor left a
-working-ish implementation in `agent.py`. It runs the happy path when the mocks
-behave. Your job is to make it **reliable under pressure** and pass the public
-evals — finding and fixing what's weak is the exercise. Do not rewrite from
-scratch unless you can justify it: we score judgment on the failure paths, and
-we will ask you to explain the code you ship, line by line, in the follow-up
-call.
+This assessment implementation preserves the starter's Python CLI and synchronous
+HTTP client. It validates planner actions, enforces travel constraints and booking
+confirmation, retries temporary failures within budgets, and reconciles uncertain
+bookings using a stable idempotency key.
 
-You are building a small agent loop that must stay **reliable under deliberately
-flaky APIs**. The mocks it talks to behave like a production LLM + tool stack:
-they time out, return 429/503, emit malformed output, and one search result
-contains untrusted text.
+The existing loop talks only to the Jubilabs mock APIs. See [DESIGN.md](DESIGN.md)
+for decisions, failure handling, regression evidence, limitations and AI disclosure.
 
 ## The task
 
@@ -49,10 +44,14 @@ pip install -r requirements.txt
 export TRIP_AGENT_BASE_URL="https://<app-domain>"   # in the portal
 export TRIP_AGENT_API_KEY="tk_..."                  # in the portal (Start page)
 
-python agent.py --goal "Find a flight from Lisbon to Tokyo on 2026-11-03" --seed my-test-seed --auto-confirm --output result.json --trace trace.jsonl
-pytest            # example test — add failure-path tests here
-python evals/run_evals.py   # runs the 6 public scenarios, prints a pass/fail table
+python3 agent.py --goal "Find a flight from Lisbon to Tokyo on 2026-11-03" --seed my-test-seed --auto-confirm --output result.json --trace trace.jsonl
+python3 -B -m pytest -q -p no:cacheprovider
+python3 evals/run_evals.py   # hosted calls; runs the 6 public scenarios sequentially
 ```
+
+Credentials must already be exported to the process. The CLI does not load dotenv
+files. `.env.example` contains placeholders only; keep the real `.env` outside Git
+and the submission archive. The public evaluator writes ignored artifacts to `out/`.
 
 ## The eval command contract
 
@@ -88,6 +87,18 @@ One JSON object per step:
 ```json
 {"run_id":"...","step":1,"action":"search_flights","args":{},"latency_ms":213,"tokens":412,"retry_count":0,"outcome":"ok"}
 ```
+
+A step is one planner iteration, including its tool work and retries. Result cost
+equals the sum of trace tokens (prompt plus completion usage). Final answers and
+handled failures retain their own step; failures before the loop have zero steps.
+
+## Verification
+
+The final offline suite passes **155 tests**. The developer's completed run of the
+unchanged hosted public evaluator passes **6/6 scenarios**. All eight documented
+fault categories have offline coverage; live injection, stale-weather and
+booking-commit-before-timeout coverage remains unconfirmed. The assessment's live
+technical walkthrough is still required. No new framework or dependency was added.
 
 ## Rules
 

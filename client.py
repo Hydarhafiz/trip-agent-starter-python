@@ -32,6 +32,9 @@ class MockApiClient:
             timeout=None,  # deliberately unset — timeouts are YOUR job
         )
 
+    def close(self) -> None:
+        self._client.close()
+
     def _request(self, method: str, path: str, body: Any = None, timeout: float | None = None, seed: str | int | None = None) -> ApiEnvelope:
         params = {"seed": seed} if seed is not None else None
         res = self._client.request(

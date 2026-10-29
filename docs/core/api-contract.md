@@ -1,4 +1,4 @@
-# Assessment API contract used for Batch 1
+# Assessment API contract
 
 Authority: sanitized official Jubilabs Mock API Reference supplied by the user
 from the assessment portal during Batch 1. Fixtures in tests/ are illustrative
@@ -15,7 +15,8 @@ examples of this contract, not captured hosted responses.
   JSON-string arguments) or final content, plus token usage. Preserve the existing
   client's request shape: the provided extract does not specify tool-declaration
   descriptor shapes or whether the tools array is mandatory. No tool declaration
-  schema is invented. Existing agent usage fields are prompt_tokens and
+  schema is invented. The completed 6/6 hosted public run demonstrates the
+  current payload works with those scenarios. Existing usage fields are prompt_tokens and
   completion_tokens; no undocumented total_tokens field is assumed.
 - Tool messages contain JSON-string content with `tool` and `result`, where
   result is the full response object. Preserve booking record metadata rather
@@ -29,7 +30,8 @@ examples of this contract, not captured hosted responses.
   key, flight and passenger for reconciliation.
 - POST `/api/mock/v1/tools/get_weather`: request city and YYYY-MM-DD date;
   response city, date, temperature_c, conditions, stale. Refetch stale weather
-  once and report remaining staleness (Batch 2, slice D).
+  once and report remaining staleness. The agent reports partial completion if
+  fresh requested weather cannot be established after this refresh.
 - Retry 429 with Retry-After, 503 with bounded backoff, and timeouts. 400, 403
   and 422 are non-retryable. Seeds belong in chat body and tool query parameters.
 
@@ -48,3 +50,11 @@ capitalized Unicode letter components longer than one character, with internal
 hyphens or apostrophes allowed. Preserve all components exactly. Initials,
 multiple people, lowercase components or additional unrecognized prose are
 ambiguous and cause booking goals to fail before any API request.
+
+Completion and trace conventions: result summaries use confirmed tool data;
+requested search, fresh weather and confirmed booking govern success. Read cache
+keys include action and canonical arguments. A logical step starts before its
+planner request and emits one complete row, including retries/tool work/final
+answers. Retry count measures extra transport attempts, not stale refreshes or
+cached actions. Token cost sums prompt_tokens plus completion_tokens, including
+malformed/final messages and late successful responses with valid usage.
